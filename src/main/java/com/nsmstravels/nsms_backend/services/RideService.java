@@ -49,4 +49,32 @@ public class RideService {
     public List<Ride> getPendingRides() {
         return rideRepository.findByStatus(RideStatus.REQUESTED);
     }
+
+    public Ride startRide(Long rideId){
+        Ride ride = rideRepository.findById(rideId)
+                .orElseThrow(() -> new RuntimeException("Ride not found"));
+        ride.setStatus(RideStatus.ONGOING);
+        return rideRepository.save(ride);
+    }
+
+    public Ride completeRide(Long rideId) {
+        Ride ride = rideRepository.findById(rideId)
+                .orElseThrow(() -> new RuntimeException("Ride not found"));
+
+        ride.setStatus(RideStatus.COMPLETED);
+        return rideRepository.save(ride);
+    }
+
+    public Ride cancelRide(Long rideId) {
+        Ride ride = rideRepository.findById(rideId)
+                .orElseThrow(() -> new RuntimeException("Ride not found"));
+
+        ride.setStatus(RideStatus.CANCELLED);
+        return rideRepository.save(ride);
+    }
+    // Fetch a single ride by its ID
+    public Ride getRideById(Long rideId) {
+        return rideRepository.findById(rideId)
+                .orElseThrow(() -> new RuntimeException("Ride not found"));
+    }
 }
